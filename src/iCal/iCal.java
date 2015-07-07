@@ -57,6 +57,8 @@ public class iCal {
 		    }
 		}while(flag == true);
 		
+		/* Getting event start and end times */
+		
 		System.out.println("What time does " + eName + " start? (ex: 7.15)" );
 		sTime = input.nextFloat();
 		System.out.println(sTime);
@@ -92,6 +94,8 @@ public class iCal {
 		 */
 		   eTime += 12;
 		}
+		
+		/* Calculating duration of event */
 		
 		hours = (int)eTime - (int)sTime;
 		
