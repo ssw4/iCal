@@ -125,7 +125,32 @@ public class iCal {
 	}
 	
 	
+	/**
+	 *  Opens a given file with the file name and .ics extension. Can take multiple .ics files?
+	 * 
+	 * @param file
+	 */
+	public static void openICSFile(String file) { 
+		// checks ics file extension
+		
+		// if no .ics file extension, terminate, file not found
+		
+		// if it is, read it into a calendar variable, static, in iCal
+		
+		// close file
+		
+	}
 	
+	/**
+	 * Writes the current calendar into an .ics file with given filename. If the file already exists, it will be overwritten.
+	 * 
+	 * @param filename
+	 */
+	public static void writeICSFile(String filename) {
+		//
+	}
+	
+
 	/**
 	 * Initializes a new Calendar.
 	 */
