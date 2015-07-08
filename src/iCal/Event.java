@@ -80,58 +80,15 @@ public class Event {
 		this.comment = "";
 	}
 	
-	/**
-	 * Initializes an Event object with name (SUMMARY), date-time start & end (DTSTART, DTEND), and geographical position (GEO).
-	 * 
-	 * @param name String
-	 * @param dstart int
-	 * @param tstart int
-	 * @param dend int
-	 * @param tend int
-	 * @param geoLat float
-	 * @param geoLong float
-	 */
-	public Event(String name, int dstart, int tstart, int dend, int tend, float geoLat, float geoLong) {
-		this(name, dstart, tstart, dend, tend);
-		this.geoLat = geoLat;
-		this.geoLong = geoLong;
-	}
+	/*
+		Removed all extra constructors as you can just call a set method if you want to change a property of the item.
 	
-	/**
-	 * Initializes an Event object with name (SUMMARY), date-time start & end (DTSTART, DTEND), and classification (CLASS).
-	 * 
-	 * @param name
-	 * @param dstart
-	 * @param tstart
-	 * @param dend
-	 * @param tend
-	 * @param classi
-	 */
-	public Event(String name, int dstart, int tstart, int dend, int tend, String classi) {
-		this(name, dstart,tstart,dend,tend);
-		this.classification = classi;
-	}
+	*/
 	
-	/**
-	 * Initializes an Event object with name (SUMMARY), date-time start & end (DTSTART, DTEND), geographical position (GEO), and classification (CLASS).
-	 * 
-	 * @param name
-	 * @param dstart
-	 * @param tstart
-	 * @param dend
-	 * @param tend
-	 * @param geoLat
-	 * @param geoLong
-	 * @param classi
-	 */
-	public Event(String name, int dstart, int tstart, int dend, int tend, float geoLat, float geoLong, String classi) {
-		this(name, dstart, tstart, dend, tend, geoLat, geoLong);
-		this.classification = classi;
-	}
-	
+	// http://www.mkyong.com/java/how-to-get-current-timestamps-in-java/
 	private String genDTstamp() {
-		// somehow generate time stamp
-		return "";
+		Timestamp ts = new Timestamp(System.currentTimeMillis());
+		return ts.toString;
 	}
 	
 

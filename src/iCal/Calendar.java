@@ -95,15 +95,22 @@ public class Calendar {
 	 * Either add events at the end and call the sort method, or
 	 * iterate through and add it at the correct place. Maybe the former, since it seems like less work to program?
 	 */
-	public void addEvent(Event event) {}; 
+	public void addEvent(Event event) {
+		calendar.add(event);
+		sortEvents();
+	}
 	
 	/**
 	 * removeEvent
 	 * 
 	 * Takes an event object and removes instances of it from the Calendar object.
+	 * http://www.tutorialspoint.com/java/util/arraylist_remove_object.htm
 	 * @param event
+	 * @return whether event was removed or not
 	 */
-	public void removeEvent(Event event) {};
+	public boolean removeEvent(Event event) {
+		return calendar.remove(event);
+	}
 	
 	
 	/**
@@ -112,7 +119,9 @@ public class Calendar {
 	 * Needs some sort of functionality to be able to sort events by their times. Right now, could use Comparators & collections sort, though we can also keep it sorted from the get go in addEvent.
 	 * Example of comparator sort: http://java2novice.com/java-collections-and-util/arraylist/sort-comparator/
 	 */
-	public void sortEvents() {};
+	public void sortEvents() {
+		Collections.sort(calendar, new EventComparator());
+	}
 	
 	/**
 	 * generateFile
@@ -124,3 +133,27 @@ public class Calendar {
 	
 }
 
+class EventComparator implements Comparator<Event> {
+	
+	@Override
+	public int compare(Event e1, Event e2) {
+		// find difference in start dates
+		int dif = e2.getDstart() - e1.getDstart();
+		// if they are the same
+		if (dif == 0) {
+			// find difference in start times
+			int tdif = e2.getTstart() - e1.getTstart();
+			// if there is no difference, find difference in end time
+			if (tdif == 0) {
+				int ddif = e2.getTend() - e1.getTend();
+				return ddif;
+			}
+			else {
+				return tdif;
+			}
+		}
+		else {
+			return dif;
+		}
+	}
+}
