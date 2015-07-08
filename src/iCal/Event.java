@@ -1,5 +1,8 @@
 package iCal;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 public class Event {
 
 	/**
@@ -59,24 +62,24 @@ public class Event {
 	private String comment;
 	
 	/**
-	 * Initializes an Event object with only name (SUMMARY) and date-time start & end (DTSTART, DTEND)
+	 * Initializes an Event object with only name (SUMMARY) and date start & end (DSTART, DEND).
+	 * 
+	 * Everything else is added by default.
 	 * 
 	 * @param name String
 	 * @param dstart int
-	 * @param tstart int
 	 * @param dend int
-	 * @param tend int
 	 */
-	public Event(String name, int dstart, int tstart, int dend, int tend) {
+	public Event(String name, int dstart, int dend) {
 		this.name = name;
 		this.dtstamp = genDTstamp(); // randomly generate when event is created
 		this.dstart = dstart;
-		this.tstart = tstart;
+		this.tstart = 120000; // by default, noon
 		this.dend = dend;
-		this.tend = tend;
+		this.tend = 120000; // by default, noon
 		this.geoLat = 0;
 		this.geoLong = 0;
-		this.classification = "PUBLIC";
+		this.classification = "PUBLIC"; // by default
 		this.comment = "";
 	}
 	
@@ -88,7 +91,7 @@ public class Event {
 	// http://www.mkyong.com/java/how-to-get-current-timestamps-in-java/
 	private String genDTstamp() {
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
-		return ts.toString;
+		return ts.toString();
 	}
 	
 
@@ -187,14 +190,20 @@ public class Event {
 	 */
 	public String toString() {
 		String event = "BEGIN:VEVENT\n";
+		// if both time and date are initialized (they are not the same)
+		if (tstart != tend) {
+			event += "DTSTART:" + this.dstart + "T" + this.tstart + "\n";
+			event += "DTEND:" + this.dend + "T" + this.tend + "\n";
+		}
+		else { // then only dates are initialized
+			event += "DTSTART;VALUE=DATE:" + this.dstart + "\n";
+			event += "DTEND;VALUE=DATE:" + this.dend + "\n";
+		}
 		event += "UID:" + this.dtstamp + "user@email.com\n";
-		// if both time and date are initialized
-		event += "DTSTART:" + this.dstart + "T" + this.tstart + "\n";
-		event += "DTEND:" + this.dend + "T" + this.tend + "\n";
 		event += "SUMMARY:" + this.name + "\n";
 		event += "GEO:" + this.geoLat + ";" + this.geoLong + "\n";
 		event += "CLASS:" + this.classification + "\n";
-		event += "END:VEVENT";
+		event += "END:VEVENT\n";
 		return event;
 	}
 }

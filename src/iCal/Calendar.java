@@ -129,7 +129,26 @@ public class Calendar {
 	 * Generates .ics file with all the events in the calendar.
 	 * Needs to print it according to how an .ics file should be specified.
 	 */
-	public void generateFile() {};
+	public String generateFile() {
+		String calFile = "BEGIN:VCALENDER\n";
+		calFile += "VERSION:" + this.version + "\n";
+		calFile += "CALSCALE:" + this.calScale + "\n";
+		calFile += "X-WR-CALNAME:" + this.calName + "\n";
+		calFile += "X-WR-TIMEZONE:" +this.tzid + "\n";
+		for (Event event : calendar) {
+			calFile += event.toString();
+		}
+		calFile += "END:VCALENDAR";
+		return calFile;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return calName + "\n" + version + "\n" + calScale + "\n" + tzid;
+		
+	}
 	
 }
 
@@ -138,14 +157,14 @@ class EventComparator implements Comparator<Event> {
 	@Override
 	public int compare(Event e1, Event e2) {
 		// find difference in start dates
-		int dif = e2.getDstart() - e1.getDstart();
+		int dif = e1.getDstart() - e2.getDstart();
 		// if they are the same
 		if (dif == 0) {
 			// find difference in start times
-			int tdif = e2.getTstart() - e1.getTstart();
+			int tdif = e1.getTstart() - e2.getTstart();
 			// if there is no difference, find difference in end time
 			if (tdif == 0) {
-				int ddif = e2.getTend() - e1.getTend();
+				int ddif = e1.getTend() - e2.getTend();
 				return ddif;
 			}
 			else {
