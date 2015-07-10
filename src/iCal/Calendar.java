@@ -3,6 +3,7 @@ package iCal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.TimeZone;
 
 public class Calendar {
 	
@@ -28,8 +29,9 @@ public class Calendar {
 	 * Stores the timezone of the Calendar.
 	 * Use the naming convention of public-domain TZ database.
 	 * Maybe need a drop-down menu to select timezones.
+	 * Using TimeZone class.
 	 */
-	private String tzid;
+	private TimeZone tz;
 	
 	/**
 	 * calendar: stores events in an Arraylist. is sortable with Comparator.
@@ -40,7 +42,7 @@ public class Calendar {
 	/**
 	 *
 	 */
-	public Calendar(String calScale, String calName, String timezone) {
+	public Calendar(String calScale, String calName, TimeZone timezone) {
 		this.setVersion("2.0");
 		this.setCalScale(calScale);
 		this.setCalName(calName);
@@ -77,13 +79,17 @@ public class Calendar {
 		this.calName = calName;
 	}
 
-	public String getTimezone() {
-		return tzid;
+	public TimeZone getTimezone() {
+		return tz;
 	}
 
-	public void setTimezone(String timezone) {
-		this.tzid = timezone;
+	public void setTimezone(TimeZone timezone) {
+		this.tz = timezone;
 	};
+	
+	public ArrayList<Event> getCalendar() {
+		return calendar;
+	}
 
 	
 	/**
@@ -134,7 +140,7 @@ public class Calendar {
 		calFile += "VERSION:" + this.version + "\n";
 		calFile += "CALSCALE:" + this.calScale + "\n";
 		calFile += "X-WR-CALNAME:" + this.calName + "\n";
-		calFile += "X-WR-TIMEZONE:" +this.tzid + "\n";
+		calFile += "X-WR-TIMEZONE:" +this.tz.getID() + "\n";
 		for (Event event : calendar) {
 			calFile += event.toString();
 		}
@@ -146,7 +152,7 @@ public class Calendar {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return calName + "\n" + version + "\n" + calScale + "\n" + tzid;
+		return calName + "\n" + version + "\n" + calScale + "\n" + tz;
 		
 	}
 	
@@ -156,23 +162,6 @@ class EventComparator implements Comparator<Event> {
 	
 	@Override
 	public int compare(Event e1, Event e2) {
-		// find difference in start dates
-		int dif = e1.getDstart() - e2.getDstart();
-		// if they are the same
-		if (dif == 0) {
-			// find difference in start times
-			int tdif = e1.getTstart() - e2.getTstart();
-			// if there is no difference, find difference in end time
-			if (tdif == 0) {
-				int ddif = e1.getTend() - e2.getTend();
-				return ddif;
-			}
-			else {
-				return tdif;
-			}
-		}
-		else {
-			return dif;
-		}
+		return e1.getDtstart().compareTo(e2.getDtstart());
 	}
 }

@@ -1,5 +1,8 @@
 package iCal;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+
 /*
  * iCal
  * holds the main function
@@ -9,11 +12,18 @@ package iCal;
 */
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.TimeZone;
 
 public class iCal {
+	
+	private static Calendar cal;
 
 	public static void main(String[] args) {
+		
 		
 		
 		/*
@@ -147,19 +157,30 @@ public class iCal {
 	
 	/**
 	 * Writes the current calendar into an .ics file with given filename. If the file already exists, it will be overwritten.
+	 * http://stackoverflow.com/questions/2885173/java-how-to-create-a-file-and-write-to-a-file
 	 * 
 	 * @param filename
 	 */
 	public static void writeICSFile(String filename) {
-		//
+		// add file extension
+		filename += ".ics";
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"))) 
+		{ writer.write(cal.generateFile()); } catch (IOException e) {
+			System.out.println("Unable to create file.");
+		}
 	}
 	
 
 	/**
 	 * Initializes a new Calendar.
 	 */
-	public static void createCalendar() {
-		
+	public static void createCalendar(String name, String timezone) {
+		// create new Calendar object
+		String calName = "Calendar Name"; // get user input for name
+		TimeZone tz = TimeZone.getTimeZone("Pacific/Honolulu"); // get user input for name
+		// TimeZone tz = TimeZone.getTimeZone(timezone);
+		cal = new Calendar("Gregorian", calName, tz);
+		// cal = new Calendar("Gregorian", name, tz);
 	}
 	
 	/**
@@ -167,7 +188,14 @@ public class iCal {
 	 * @param cal
 	 */
 	public static void displayCalendar(Calendar cal) {
+		// displays all events by name
+		ArrayList<Event> calendar = cal.getCalendar();
 		
+		int count = 1;
+		for (Event event : calendar) {
+			System.out.println(count + ". " + event.getName());
+			count++;
+		}
 	}
 	
 	/**

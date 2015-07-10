@@ -1,7 +1,7 @@
 package iCal;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Event {
 
@@ -17,7 +17,7 @@ public class Event {
 	 * Value Type: Date-Time.
 	 * Time stamp of when the event was made.
 	 */
-	private String dtstamp;
+	private ZonedDateTime dtstamp;
 	
 	/**
 	 * DSTART / DEND
@@ -26,22 +26,17 @@ public class Event {
 	 * DTSTART, DTEND: Date-Time Start, Date-Time End
 	 * Value Type: Date-Time (need to look it up), in the format of:
 	 * 19980118T230000, where YYYYMMDDTHHMMSS
-	 * Each variable split into two int variables each. Date & Time, so:
-	 * DSTART: 19980118, and
-	 * TSTART: 230000.
-	 * And same for the "end" time variables.
+	 * Using ZonedDateTime class, to store both the date and time.
 	 */
-	private int dstart;
-	private int dend;
-	private int tstart;
-	private int tend;
+	private ZonedDateTime dtstart;
+	private ZonedDateTime dtend;
 	/**
 	 * GEO: Geographic Position.
 	 * Value Type: float.
 	 * Format: two semicolon-separated float values.
 	 * Specifies latitude and longitude. May be specified up to 6 decimal places.
 	 * Optional.
-	 * GEO variable split into two float variables. LAT & LONG.
+	 * Using LatLong class.
 	 */
 	private float geoLat;
 	private float geoLong;
@@ -70,13 +65,11 @@ public class Event {
 	 * @param dstart int
 	 * @param dend int
 	 */
-	public Event(String name, int dstart, int dend) {
+	public Event(String name, ZonedDateTime dtstart, ZonedDateTime dtend) {
 		this.name = name;
 		this.dtstamp = genDTstamp(); // randomly generate when event is created
-		this.dstart = dstart;
-		this.tstart = 120000; // by default, noon
-		this.dend = dend;
-		this.tend = 120000; // by default, noon
+		this.dtstart = dtstart;
+		this.dtend = dtend;
 		this.geoLat = 0;
 		this.geoLong = 0;
 		this.classification = "PUBLIC"; // by default
@@ -88,10 +81,25 @@ public class Event {
 	
 	*/
 	
+	public ZonedDateTime getDtstart() {
+		return dtstart;
+	}
+
+	public void setDtstart(ZonedDateTime dtstart) {
+		this.dtstart = dtstart;
+	}
+
+	public ZonedDateTime getDtend() {
+		return dtend;
+	}
+
+	public void setDtend(ZonedDateTime dtend) {
+		this.dtend = dtend;
+	}
+
 	// http://www.mkyong.com/java/how-to-get-current-timestamps-in-java/
-	private String genDTstamp() {
-		Timestamp ts = new Timestamp(System.currentTimeMillis());
-		return ts.toString();
+	private ZonedDateTime genDTstamp() {
+		return ZonedDateTime.now();
 	}
 	
 
@@ -100,37 +108,7 @@ public class Event {
 	 * @return
 	 */
 	
-	public int getDstart() {
-		return dstart;
-	}
 
-	public void setDstart(int dstart) {
-		this.dstart = dstart;
-	}
-
-	public int getDend() {
-		return dend;
-	}
-
-	public void setDend(int dend) {
-		this.dend = dend;
-	}
-
-	public int getTstart() {
-		return tstart;
-	}
-
-	public void setTstart(int tstart) {
-		this.tstart = tstart;
-	}
-
-	public int getTend() {
-		return tend;
-	}
-
-	public void setTend(int tend) {
-		this.tend = tend;
-	}
 
 	public String getName() {
 		return name;
@@ -189,17 +167,15 @@ public class Event {
 	 * 
 	 */
 	public String toString() {
+		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("YYYYMMdd");
+		DateTimeFormatter datetimeFormat = DateTimeFormatter.ofPattern("YYYYMMdd'T'HHmmss");
 		String event = "BEGIN:VEVENT\n";
-		// if both time and date are initialized (they are not the same)
-		if (tstart != tend) {
-			event += "DTSTART:" + this.dstart + "T" + this.tstart + "\n";
-			event += "DTEND:" + this.dend + "T" + this.tend + "\n";
-		}
-		else { // then only dates are initialized
-			event += "DTSTART;VALUE=DATE:" + this.dstart + "\n";
-			event += "DTEND;VALUE=DATE:" + this.dend + "\n";
-		}
-		event += "UID:" + this.dtstamp + "user@email.com\n";
+		event += "DTSTART:" + dtstart.format(datetimeFormat) + "\n";
+		// event += "DTSTART;VALUE=DATE:" + dtstart.format(dateFormat) + "\n";
+		event += "DTEND:" + dtend.format(datetimeFormat) + "\n";
+		// event += "DTEND;VALUE=DATE:" + dtend.format(dateFormat) + "\n";
+		// replace user@email.com with the user's name or something
+		event += "UID:" + dtstamp.format(datetimeFormat) + "user@email.com\n";
 		event += "SUMMARY:" + this.name + "\n";
 		event += "GEO:" + this.geoLat + ";" + this.geoLong + "\n";
 		event += "CLASS:" + this.classification + "\n";
