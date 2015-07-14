@@ -161,7 +161,7 @@ public class iCal {
 	 * 
 	 * @param filename
 	 */
-	public static void writeICSFile(String filename) {
+	public static void writeICSFile(String filename, Calendar cal) {
 		// add file extension
 		filename += ".ics";
 		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"))) 

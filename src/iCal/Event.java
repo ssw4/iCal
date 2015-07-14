@@ -169,17 +169,17 @@ public class Event {
 	public String toString() {
 		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("YYYYMMdd");
 		DateTimeFormatter datetimeFormat = DateTimeFormatter.ofPattern("YYYYMMdd'T'HHmmss");
-		String event = "BEGIN:VEVENT\n";
-		event += "DTSTART:" + dtstart.format(datetimeFormat) + "\n";
-		// event += "DTSTART;VALUE=DATE:" + dtstart.format(dateFormat) + "\n";
-		event += "DTEND:" + dtend.format(datetimeFormat) + "\n";
-		// event += "DTEND;VALUE=DATE:" + dtend.format(dateFormat) + "\n";
+		String event = "BEGIN:VEVENT\r\n";
+		event += "DTSTART:" + dtstart.format(datetimeFormat) + "\r\n";
+		// event += "DTSTART;VALUE=DATE:" + dtstart.format(dateFormat) + "\r\n";
+		event += "DTEND:" + dtend.format(datetimeFormat) + "\r\n";
+		// event += "DTEND;VALUE=DATE:" + dtend.format(dateFormat) + "\r\n";
 		// replace user@email.com with the user's name or something
-		event += "UID:" + dtstamp.format(datetimeFormat) + "user@email.com\n";
-		event += "SUMMARY:" + this.name + "\n";
-		event += "GEO:" + this.geoLat + ";" + this.geoLong + "\n";
-		event += "CLASS:" + this.classification + "\n";
-		event += "END:VEVENT\n";
+		event += "UID:" + dtstamp.format(datetimeFormat) + "user@email.com\r\n";
+		event += "SUMMARY:" + this.name + "\r\n";
+		event += "GEO:" + this.geoLat + ";" + this.geoLong + "\r\n";
+		event += "CLASS:" + this.classification + "\r\n";
+		event += "END:VEVENT\r\n";
 		return event;
 	}
 }

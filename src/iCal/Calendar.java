@@ -136,15 +136,15 @@ public class Calendar {
 	 * Needs to print it according to how an .ics file should be specified.
 	 */
 	public String generateFile() {
-		String calFile = "BEGIN:VCALENDER\n";
-		calFile += "VERSION:" + this.version + "\n";
-		calFile += "CALSCALE:" + this.calScale + "\n";
-		calFile += "X-WR-CALNAME:" + this.calName + "\n";
-		calFile += "X-WR-TIMEZONE:" +this.tz.getID() + "\n";
+		String calFile = "BEGIN:VCALENDAR\r\n";
+		calFile += "VERSION:" + this.version + "\r\n";
+		calFile += "CALSCALE:" + this.calScale + "\r\n";
+		calFile += "X-WR-CALNAME:" + this.calName + "\r\n";
+		calFile += "X-WR-TIMEZONE:" +this.tz.getID() + "\r\n";
 		for (Event event : calendar) {
 			calFile += event.toString();
 		}
-		calFile += "END:VCALENDAR";
+		calFile += "END:VCALENDAR\r\n";
 		return calFile;
 	}
 	

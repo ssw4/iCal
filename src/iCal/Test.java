@@ -13,7 +13,7 @@ import java.util.TimeZone;
 public class Test {
 
 	public static void main(String[] args) {
-		Calendar cal = new Calendar("Gregorian", "TestCal", TimeZone.getTimeZone("Pacific/Honolulu"));
+		Calendar cal = new Calendar("GREGORIAN", "TestCal", TimeZone.getTimeZone("Pacific/Honolulu"));
 		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("YYYYMMdd");
 		DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HHmmss");
 		
@@ -27,6 +27,7 @@ public class Test {
 		cal.addEvent(e2);
 		cal.addEvent(e3);
 		System.out.println(cal.generateFile());
+		iCal.writeICSFile("filename", cal);
 	}
 
 }
