@@ -25,118 +25,216 @@ public class iCal {
 	public static void main(String[] args) {
 		
 		
-		
 		/*
 		 * Menu display.
 		 * > Load .ics files into a placeholder calendar, that's only for that certain open instance.
 		 * > Can load events into another calendar?
 		 */
-        	Scanner input = new Scanner(System.in);
-		String  eName;
-		String  date; 
-		int     day;
-		int     month;
-		int     year;
+		 
+		Scanner input = new Scanner(System.in);
+		String  eName;					//Event name
+		String  sDate, eDate; 				//Start Date, End Date
+		int     sDay = 0, eDay;				//Start Day, End Day
+		int     sMonth = 0, eMonth;			//Start Month, End Month
+		int     sYear = 0, eYear;			//Start Year, End Year
 		int     hours;
 		int     minutes = 0;
-		float   duration;
-		float   sTime;
-		float   eTime;
-	    	boolean flag = false;
-	    
-		System.out.println("Please enter the name of your event.");
-		eName = input.nextLine();
-		System.out.println(eName);
-		
-		do
-	    	{
-	    		System.out.println("Please enter the date of event, ex 01 15 2015");
-	    		try
-	        	{   
-	        		flag = false;
-	        		month = input.nextInt();
-		        	day = input.nextInt();
-		        	year = input.nextInt();		        
-				 System.out.println("Event Date: " + month +"/" + day  + "/" + year);
-		    }
-		    catch(Exception e)
-		    {
-		    	flag = true;
-			System.out.println("Please enter date in correct format, (month day year)");
-		        input.next();
-		    }
-		}while(flag == true);
-		
-		/* Getting event start and end times */
-		
-		System.out.println("What time does " + eName + " start? (ex: 7.15)" );
-		sTime = input.nextFloat();
-		System.out.println(sTime);
-		System.out.println("Enter (1) AM or (2) PM");
-		
-		/*
-		 *    Initialed here since its the only place we'll use it
+		int     timeChoice;				//Use to decide between a.m and p.m 
+		int 	menuChoice = 0;				
+		float   duration;				//Event duration, stored in minutes
+		float   sTime;					//Start Time
+		float   eTime;					//End Time
+		float   time;
+	    	boolean flag = false;	 
+        
+        	/*
+        	 *  Getting the Menuchoice from the user
 		 */
 		 
-		int choice;
-		choice = input.nextInt();
+	  	System.out.println("\n(1) Create new event. \n(2) View current events in calendar.\n(3) Modify event.\n");
+	    	do
+	    	{
+	    		flag = false;
+	    		try
+	    		{
+	    			do
+	    			{   
+	    				System.out.println("Please enter the number of your menu choice.");
+	    				menuChoice=input.nextInt();
+	    				input.nextLine();
+	    		}while(menuChoice != 1 && menuChoice != 2 && menuChoice != 3);
+	    		
+	    		catch(Exception e)
+	    		{
+	    			flag = true;
+	    			input.nextLine();
+	    		}
+	    	}while(flag == true);
 		
-		if(choice == 2)
-		{
+		
 		/*
-		 *  Going by 24 hrs,  2 = Pm	
+		 * Getting info for the new event because user chose option 1
 		 */
-		   sTime += 12;
-		}
 		
-		System.out.println(sTime);
+		if(menuChoice == 1)
+	    	{
+	    		System.out.println("Please enter the name of your event.");
+			eName = input.nextLine();
+			System.out.println(eName);
+			
+			do
+		    	{
+		    		flag = false;
+		    		try
+		        	{  
+		    			do
+		    			{
+		    				System.out.println("Please enter the start date of event, ex 01 15 2015");
+		    				sMonth = input.nextInt();
+		    				sDay = input.nextInt();
+		    				sYear = input.nextInt();		        
+		  
+			 		}while(sMonth > 12 || sMonth < 1 || sDay > 31 || sDay < 1 || sYear > 9999 || sYear < 0);
+		    		}
+			    	catch(Exception e)
+			    	{
+			    		flag = true;
+			        	input.next();
+			    	}
+		    	}while(flag == true);
+			
+			/*
+			 *  Getting Start Date of event
+			 */
+			
+			
+			do
+			{
+				System.out.println("Enter (1) if " + eName + " ends on " + sMonth + "/" + sDay + "/" + sYear);
+				System.out.println("Otherwise enter (2).");
+				menuChoice = input.nextInt();
+			}while(menuChoice != 1 && menuChoice != 2);
+			
+			if(menuChoice == 1)
+			{
+				eDay = sDay;
+				eMonth = sMonth;
+				eYear = sYear;
+			}
+			else
+			{
+				do
+				{
+					flag = false;
+					try
+					{  
+						do
+						{
+							System.out.println("Please enter the end date of event, ex 01 15 2015");
+							eMonth = input.nextInt();
+							eDay = input.nextInt();
+							eYear = input.nextInt();
+							
+							if((eDay - sDay < 0 && (eMonth - sMonth) <= 0 && eYear <= sYear) || eYear < sYear)
+							{
+								System.out.println("End date needs to be after " + sMonth + "/" + sDay + "/" + sYear);
+								flag = true;
+							}
+			  
+						}while(eMonth > 12 || eMonth < 1 || eDay > 31 || eDay < 1 || eYear > 9999 || eYear < 0);
+							
+					}
+					catch(Exception e)
+					{
+						flag = true;
+						input.next();
+					}
+				}while(flag == true);
+			}
+			do
+			{
+				System.out.println("What time does " + eName + " start? (ex: 7.15)" );
+				sTime = input.nextFloat();
+				
+			}while(sTime > 13 || sTime < 0);
+			
+			do
+			{
+				System.out.println("Enter (1) AM or (2) PM");
+				timeChoice = input.nextInt();
+				
+				if(timeChoice == 2 && (int)sTime != 12)
+				{
+					sTime += 12;
+				}
+			}while(timeChoice != 1 && timeChoice != 2 );
+			
+			do
+			{	
+				System.out.println("What time does " + eName + " end? (ex: 10.05)" );
+				eTime = input.nextFloat();
+				
+			}while(eTime > 13 || eTime < 0);
+			
+			do
+			{
+				System.out.println("Enter (1) AM or (2) PM");
+				timeChoice = input.nextInt();
+			
+				if(timeChoice == 2 && (int)eTime != 12)
+				{
+					eTime += 12;
+				}
+				
+			}while(timeChoice != 1 && timeChoice != 2);
+			
+			hours = (int)eTime - (int)sTime;
+			
+			if((eTime - (int)eTime) < (sTime - (int)sTime))
+			{
+				if (hours == 1 || hours == 0) 
+				{	
+				    hours = 0;
+				    time = 60 - (100 * (eTime - (int)eTime));
+				    minutes = (int)Math.round(time); 
+				}
+			   
+			    else
+			    {
+			    	hours --;
+				time = 60 - (100 * (eTime - (int)eTime));		
+				minutes = (int)Math.round(time);	    
+			    }
+			}
+			
+			else
+			{
+				minutes = (int) (100 * ((eTime - (int)eTime) - (sTime - (int)sTime)));
+			}
+			
+			duration = (60 * hours) + minutes;
+			
+			if(hours == 0)
+				System.out.println("Duration: " + minutes + " minutes");
+			else if (hours == 1)
+				System.out.println("Duration: " + hours + " hour " + "and " + minutes + " minutes");
+			else
+				System.out.println("Duration: " + hours + " hours " + "and " + minutes + " minutes");
+			
+	    }
 		
-		System.out.println("What time does " + eName + " end? (ex: 10.05)" );
-		eTime = input.nextFloat();
-		System.out.println(eTime);
-		System.out.println("Enter (1) AM or (2) PM");
-        	choice = input.nextInt();
-        	
-        	if(choice == 2)
-		{
-		/*
-		 *  Going by 24 hrs,  2 = Pm	
-		 */
-		   eTime += 12;
-		}
+	    else if(menuChoice == 2)
+	    {
+	    	System.out.println("Method to view current events.");
+	    }
+	    else
+	    {
+	    	System.out.println("Modify event method here");
+	    }
 		
-		/* Calculating duration of event */
-		
-		hours = (int)eTime - (int)sTime;
-		
-		if((eTime - (int)eTime) < (sTime - (int)sTime))
-		{
-		    double time = 0;
-		    //time = 100 * (eTime - (int)eTime);  
-		    //System.out.println("eTime: " + time );
-		    //time = 100 * (sTime - (int)sTime);
-		    //System.out.println(Math.round(time));
-	            //minutes = (int)(60 - Math.round(time));
-		    //System.out.println("minutes " + minutes);
-		    if (hours == 1 || hours == 0) 
-	  	    {	
-			hours = 0;
-			time = 100 * (sTime - (int)sTime);
-			System.out.println(Math.round(time));
-			//minutes = (int)(60 - Math.round(time));
-			minutes = (int)Math.round(time); 
-			System.out.println("duration: " + minutes + " minutes");
-		        duration = minutes;
-		    }
-		    
-		    else
-		    {
-			    hours --;
-		    }
-		}
-		
-		System.out.println("duration: " + hours + " hours" + minutes + " minutes");
 	}
+	
+	
 	
 	
 	/**
