@@ -37,18 +37,18 @@ public class iCal {
 		int     sDay = 0, eDay;				//Start Day, End Day
 		int     sMonth = 0, eMonth;			//Start Month, End Month
 		int     sYear = 0, eYear;			//Start Year, End Year
-		int     hours;
-		int     minutes = 0;
+		int     hours;					// Event hours
 		int     timeChoice;				//Use to decide between a.m and p.m 
-		int 	menuChoice = 0;				
+		int 	menuChoice = 0;				//Displayed menu choice	
 		float   duration;				//Event duration, stored in minutes
 		float   sTime;					//Start Time
 		float   eTime;					//End Time
 		float   time;
+		float 	minutes;				//Event duration
 	    	boolean flag = false;	 
         
         	/*
-        	 *  Getting the Menuchoice from the user
+        	 *  Getting the Menu choice from the user
 		 */
 		 
 	  	System.out.println("\n(1) Create new event. \n(2) View current events in calendar.\n(3) Modify event.\n");
@@ -82,6 +82,36 @@ public class iCal {
 			eName = input.nextLine();
 			System.out.println(eName);
 			
+			/*
+			 *  Display a menu for user to decided what type of event
+			 */
+			
+			System.out.println(" (1) General\n (2) To-Do\n (3) Urgent\n");
+			do
+			{
+				flag = false;
+				try
+				{
+					do
+					{	System.out.println("Please specify the classification of " + eName);
+						specification = input.nextInt();
+						input.nextLine();
+					}while(specification != 1 && specification != 2 && specification != 3);
+					
+					// Depending on which option they select we can go from there
+					// lmk if theres any options you think we should add as far as classification
+				}
+				catch(Exception e)
+				{
+					flag = true;
+					input.nextLine();
+				}
+			}while(flag == true);
+			
+			/*
+			 *  Get the start date of the event
+			 */
+			
 			do
 		    	{
 		    		flag = false;
@@ -104,7 +134,7 @@ public class iCal {
 		    	}while(flag == true);
 			
 			/*
-			 *  Getting Start Date of event
+			 *  Determining if event ends on same day as start date or if event runs more than 1 day
 			 */
 			
 			
@@ -114,6 +144,11 @@ public class iCal {
 				System.out.println("Otherwise enter (2).");
 				menuChoice = input.nextInt();
 			}while(menuChoice != 1 && menuChoice != 2);
+			
+			/*
+			 *  If the event is during 1 day, set start and end date = to each other
+			 *  Otherwise get the end date and verify its after the starting date
+			 */
 			
 			if(menuChoice == 1)
 			{
@@ -151,12 +186,22 @@ public class iCal {
 					}
 				}while(flag == true);
 			}
+			
+			/*
+			 *  Getting the start time of the event
+			 */
+			
 			do
 			{
 				System.out.println("What time does " + eName + " start? (ex: 7.15)" );
 				sTime = input.nextFloat();
 				
 			}while(sTime > 13 || sTime < 0);
+			
+			
+			/*
+			 * Determine if event starts in the am or pm
+			 */
 			
 			do
 			{
@@ -169,12 +214,20 @@ public class iCal {
 				}
 			}while(timeChoice != 1 && timeChoice != 2 );
 			
+			/*
+			 *  Getting the end time of the event
+			 */
+			
 			do
 			{	
 				System.out.println("What time does " + eName + " end? (ex: 10.05)" );
 				eTime = input.nextFloat();
 				
 			}while(eTime > 13 || eTime < 0);
+			
+			/*
+			 * Determine if event ends in the am or pm
+			 */
 			
 			do
 			{
@@ -188,38 +241,38 @@ public class iCal {
 				
 			}while(timeChoice != 1 && timeChoice != 2);
 			
+			/*
+			 * Computing the duration of the event 
+			 */
+			
 			hours = (int)eTime - (int)sTime;
+			minutes = 100 * ((sTime - (int)sTime) - (eTime - (int)eTime));
 			
-			if((eTime - (int)eTime) < (sTime - (int)sTime))
+			if(minutes > 0)
 			{
-				if (hours == 1 || hours == 0) 
-				{	
-				    hours = 0;
-				    time = 60 - (100 * (eTime - (int)eTime));
-				    minutes = (int)Math.round(time); 
-				}
-			   
-			    else
-			    {
-			    	hours --;
-				time = 60 - (100 * (eTime - (int)eTime));		
-				minutes = (int)Math.round(time);	    
-			    }
+				hours --;
+				minutes = 60 - minutes;
 			}
 			
 			else
 			{
-				minutes = (int) (100 * ((eTime - (int)eTime) - (sTime - (int)sTime)));
+				minutes = (100 * ((eTime - (int)eTime) - (sTime - (int)sTime)));
 			}
 			
+			/*
+			 * Storing event duration in minutes
+			 */
+			 
 			duration = (60 * hours) + minutes;
-			
+			/*
+			 * Formatting to correctly display event duration
+			 */
 			if(hours == 0)
-				System.out.println("Duration: " + minutes + " minutes");
+				System.out.printf("Duration: %.0f minutes", minutes);
 			else if (hours == 1)
-				System.out.println("Duration: " + hours + " hour " + "and " + minutes + " minutes");
+				System.out.printf("Duration: %d hour and %.0f minutes", hours, minutes );
 			else
-				System.out.println("Duration: " + hours + " hours " + "and " + minutes + " minutes");
+				System.out.printf("Duration: %d hours and %.0f minutes", hours, minutes);
 			
 	    }
 		
