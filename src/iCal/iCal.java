@@ -45,6 +45,7 @@ public class iCal {
 		float   eTime;					//End Time
 		float   time;
 		float 	minutes;				//Event duration
+		int 	specification;			// event specification
 	    	boolean flag = false;	 
         
         	/*
@@ -62,7 +63,8 @@ public class iCal {
 	    				System.out.println("Please enter the number of your menu choice.");
 	    				menuChoice=input.nextInt();
 	    				input.nextLine();
-	    		}while(menuChoice != 1 && menuChoice != 2 && menuChoice != 3);
+	    			} while(menuChoice != 1 && menuChoice != 2 && menuChoice != 3);
+	    		} 
 	    		
 	    		catch(Exception e)
 	    		{
@@ -96,7 +98,7 @@ public class iCal {
 					{	System.out.println("Please specify the classification of " + eName);
 						specification = input.nextInt();
 						input.nextLine();
-					}while(specification != 1 && specification != 2 && specification != 3);
+					} while(specification != 1 && specification != 2 && specification != 3);
 					
 					// Depending on which option they select we can go from there
 					// lmk if theres any options you think we should add as far as classification
