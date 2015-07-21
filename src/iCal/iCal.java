@@ -1,7 +1,10 @@
 package iCal;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 
 /*
  * iCal
@@ -14,7 +17,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.TimeZone;
 
@@ -297,14 +307,79 @@ public class iCal {
 	 * 
 	 * @param file
 	 */
-	public static void openICSFile(String file) { 
-		// checks ics file extension
-		
-		// if no .ics file extension, terminate, file not found
-		
-		// if it is, read it into a calendar variable, static, in iCal
-		
-		// close file
+	public static Calendar openICSFile(String file) { 
+		String[][] calProperties = {{"calScale", "CALSCALE", ""}, {"calName", "X-WR-CALNAME", ""}, {"tz", "X-WR-TIMEZONE", ""}};
+		String[][] eventProperties = {{"dtstart", "DTSTART", ""}, {"dtendd", "DTEND", ""}, {"name", "SUMMARY", ""}, {"geo", "GEO", "", ""}, {"classification", "CLASS", ""}};
+		SimpleDateFormat format =
+	            new SimpleDateFormat("YYYYMMdd'T'HHmmss");
+		try(BufferedReader br = new BufferedReader(new FileReader(file))) {
+		    String line = br.readLine();
+		    
+		    // initializing the calendar
+		    while (!line.contains("BEGIN:VEVENT") && line != null ) {
+		    	for (String[] p : calProperties) {
+		    		if (line.contains(p[1])) { // if it contains the header
+		    			String[] property = line.split(":"); // get the value of it
+		    			p[2] = property[1].replace("\r\n", ""); // put it as the third value in the array
+		    		}
+		    	}
+		    	line = br.readLine();
+			} // end loop when the next line contains BEGIN:VEVENT
+		    
+		    // create Calendar
+		    
+		    Calendar cal = new Calendar(calProperties[0][2], calProperties[1][2], TimeZone.getTimeZone(calProperties[2][2]));
+		    
+		    // process all events in the calendar
+		    while (!line.contains("END:VCALENDAR") && line != null) {
+		    	while (!line.contains("END:VEVENT") && line !=null) {
+		    		for (String[] e : eventProperties) {
+		    			if (line.contains(e[1])) {
+		    				String[] property = line.split(":");
+		    				e[2] = property[1].replace("\r\n", "");
+		    				if (e[0].contains("geo")) {
+		    					String [] geo = property[1].split(";");// split the values of geo
+		    					e[2] = geo[0].replace("\r\n", "");
+		    					e[3] = geo[1].replace("\r\n", "");
+		    				}
+		    			}
+		    		}
+		    		line = br.readLine();
+		    	} // process events here
+		    	
+				try {
+					ZonedDateTime dtstart = ZonedDateTime.ofInstant(format.parse(eventProperties[0][2]).toInstant(), ZoneId.of(cal.getTimezone().getID()));
+					ZonedDateTime dtend = ZonedDateTime.ofInstant(format.parse(eventProperties[1][2]).toInstant(), ZoneId.of(cal.getTimezone().getID()));
+					String name = eventProperties[2][2];
+			    	Event event = new Event(name,  dtstart, dtend);
+			    	if (eventProperties[3][2] != "" && eventProperties[3][3] != "") {
+			    		// if geo is not empty
+			    		event.setGeoLat(Float.parseFloat(eventProperties[3][2]));
+			    		event.setGeoLong(Float.parseFloat(eventProperties[3][3]));
+			    	}
+			    	if (eventProperties[4][2] != "") {
+			    		event.setClassification(eventProperties[4][2]);
+			    	}
+			    	cal.addEvent(event);
+			
+			 
+				} catch (ParseException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
+				line = br.readLine();
+		    }
+		    
+		    return cal;
+		    
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
 		
 	}
 	
