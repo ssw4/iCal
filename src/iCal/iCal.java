@@ -309,9 +309,9 @@ public class iCal {
 	 */
 	public static Calendar openICSFile(String file) { 
 		String[][] calProperties = {{"calScale", "CALSCALE", ""}, {"calName", "X-WR-CALNAME", ""}, {"tz", "X-WR-TIMEZONE", ""}};
-		String[][] eventProperties = {{"dtstart", "DTSTART", ""}, {"dtendd", "DTEND", ""}, {"name", "SUMMARY", ""}, {"geo", "GEO", "", ""}, {"classification", "CLASS", ""}};
+		String[][] eventProperties = {{"dtstart", "DTSTART", ""}, {"dtendd", "DTEND", ""}, {"name", "SUMMARY", ""}, {"geo", "GEO", "", ""}, {"classification", "CLASS", ""}, {"comment", "DESCRIPTION", ""}, {"last-modified", "LAST-MODIFIED", ""}};
 		SimpleDateFormat format =
-	            new SimpleDateFormat("YYYYMMdd'T'HHmmss");
+	            new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 		try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 		    String line = br.readLine();
 		    
@@ -331,16 +331,33 @@ public class iCal {
 		    Calendar cal = new Calendar(calProperties[0][2], calProperties[1][2], TimeZone.getTimeZone(calProperties[2][2]));
 		    
 		    // process all events in the calendar
-		    while (!line.contains("END:VCALENDAR") && line != null) {
-		    	while (!line.contains("END:VEVENT") && line !=null) {
+		    while (line != null && !line.contains("END:VCALENDAR")) {
+		    	while (line != null && !line.contains("END:VEVENT")) {
 		    		for (String[] e : eventProperties) {
 		    			if (line.contains(e[1])) {
-		    				String[] property = line.split(":");
-		    				e[2] = property[1].replace("\r\n", "");
 		    				if (e[0].contains("geo")) {
+		    					String[] property = line.split(":");
+			    				e[2] = property[1].replace("\r\n", "");
 		    					String [] geo = property[1].split(";");// split the values of geo
 		    					e[2] = geo[0].replace("\r\n", "");
 		    					e[3] = geo[1].replace("\r\n", "");
+		    				}
+		    				else if (e[0].contains("comment")) {
+		    					String comments[] = line.split(":");
+		    					String comment = "";
+		    					if (comments.length == 2) {
+		    						comment = comments[1];
+		    					}
+		    					line = br.readLine();
+		    					while (line != null && !line.contains("LAST-MODIFIED")) {
+		    						comment += "\n" + line;
+		    						line = br.readLine();
+		    					}
+		    					e[2] = comment;
+		    				}
+		    				else {
+		    					String[] property = line.split(":");
+			    				e[2] = property[1].replace("\r\n", "");
 		    				}
 		    			}
 		    		}
@@ -350,6 +367,7 @@ public class iCal {
 				try {
 					ZonedDateTime dtstart = ZonedDateTime.ofInstant(format.parse(eventProperties[0][2]).toInstant(), ZoneId.of(cal.getTimezone().getID()));
 					ZonedDateTime dtend = ZonedDateTime.ofInstant(format.parse(eventProperties[1][2]).toInstant(), ZoneId.of(cal.getTimezone().getID()));
+					ZonedDateTime dtstamp = ZonedDateTime.ofInstant(format.parse(eventProperties[6][2]).toInstant(), ZoneId.of(cal.getTimezone().getID()));
 					String name = eventProperties[2][2];
 			    	Event event = new Event(name,  dtstart, dtend);
 			    	if (eventProperties[3][2] != "" && eventProperties[3][3] != "") {
@@ -360,6 +378,10 @@ public class iCal {
 			    	if (eventProperties[4][2] != "") {
 			    		event.setClassification(eventProperties[4][2]);
 			    	}
+			    	if (eventProperties[5][2] != "") {
+			    		event.setComment(eventProperties[5][2]);
+			    	}
+			    	event.setDtstamp(dtstamp);
 			    	cal.addEvent(event);
 			
 			 

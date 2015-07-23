@@ -19,6 +19,8 @@ public class Event {
 	 */
 	private ZonedDateTime dtstamp;
 	
+
+
 	/**
 	 * DSTART / DEND
 	 * TSTART / TEND
@@ -54,7 +56,7 @@ public class Event {
 	 * Holds comments. Also for our specific specification, must also hold the Great Circle Distance between two places.
 	 * Optional.
 	 */
-	private String comment;
+	private String comment = "";
 	
 	/**
 	 * Initializes an Event object with only name (SUMMARY) and date start & end (DSTART, DEND).
@@ -95,6 +97,14 @@ public class Event {
 
 	public void setDtend(ZonedDateTime dtend) {
 		this.dtend = dtend;
+	}
+	
+	public ZonedDateTime getDtstamp() {
+		return dtstamp;
+	}
+
+	public void setDtstamp(ZonedDateTime dtstamp) {
+		this.dtstamp = dtstamp;
 	}
 
 	// http://www.mkyong.com/java/how-to-get-current-timestamps-in-java/
@@ -176,9 +186,12 @@ public class Event {
 		// event += "DTEND;VALUE=DATE:" + dtend.format(dateFormat) + "\r\n";
 		// replace user@email.com with the user's name or something
 		event += "UID:" + dtstamp.format(datetimeFormat) + "user@email.com\r\n";
+		event += "DESCRIPTION:" + getComment() + "\r\n";
+		event += "LAST-MODIFIED:" + dtstamp.format(datetimeFormat) + "\r\n";
 		event += "SUMMARY:" + this.name + "\r\n";
 		event += "GEO:" + this.geoLat + ";" + this.geoLong + "\r\n";
 		event += "CLASS:" + this.classification + "\r\n";
+		
 		event += "END:VEVENT\r\n";
 		return event;
 	}

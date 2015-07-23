@@ -161,12 +161,17 @@ public class Calendar {
 		ListIterator<Event> iterator = calendar.listIterator();
 		while (iterator.hasNext()) {
 			if (iterator.hasPrevious()) {
-				Event e1 = calendar.get(iterator.previousIndex()); // gets the previous event
-				Event e2 = calendar.get(iterator.nextIndex()); // gets the next event
+				int i1 = iterator.previousIndex();
+				int i2 = iterator.nextIndex();
+				Event e1 = calendar.get(i1); // gets the previous event
+				Event e2 = calendar.get(i2); // gets the next event
 				
 				if (e1.getGeoLat() != 0 && e1.getGeoLong() != 0 && e2.getGeoLat() != 0 && e2.getGeoLong() != 0) {
-					String distance = Float.toString(calculateDistance(e1.getGeoLat(), e1.getGeoLong(), e2.getGeoLat(), e2.getGeoLong()));
-					e1.appendComment("Distance to next event: " + distance + "m");
+					float distancekm = calculateDistance(e1.getGeoLat(), e1.getGeoLong(), e2.getGeoLat(), e2.getGeoLong());
+					float distancem = distancekm * (float) 0.621371;
+					e1.appendComment("Distance to next event: " + distancem + " miles");
+					e1.appendComment("Distance to next event: " + distancekm + "km");
+					calendar.set(i1, e1);
 				}
 			}
 			iterator.next();
@@ -188,7 +193,7 @@ public class Calendar {
 	    
 	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
-	    return (float) (c * r);
+	    return (float) ((c * r) / 1000);
 	}
 	
 }
