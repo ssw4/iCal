@@ -53,9 +53,8 @@ public class iCal {
 		float   duration;				//Event duration, stored in minutes
 		float   sTime;					//Start Time
 		float   eTime;					//End Time
-		float   time;
 		float 	minutes;				//Event duration
-		int 	specification;			// event specification
+		int 	specification;			        // event specification
 	    	boolean flag = false;	 
         
         	/*
@@ -285,7 +284,44 @@ public class iCal {
 				System.out.printf("Duration: %d hour and %.0f minutes", hours, minutes );
 			else
 				System.out.printf("Duration: %d hours and %.0f minutes", hours, minutes);
+				
+			/*
+			 * Getting TimeZone from the user
+			 */
 			
+			System.out.println("Please enter the time zone that " + eName + " is in.");
+			System.out.println("(1) Pacific/Honolulu (Hawaii)");
+			System.out.println("(2) America/NewYork (Eastern)");
+			System.out.println("(3) America/Chicago (Central)");
+			System.out.println("(4) America/Los-Angeles (Pacific)");
+			System.out.println("(5) Not listed");
+			
+			do
+		    	{
+		    		flag = false;
+		    
+		    		try
+		    		{
+		    			do
+		    			{   
+		    				System.out.println("Please enter the number of your choice.");
+		    				menuChoice=input.nextInt();
+		    				input.nextLine();
+		    			}while(menuChoice != 1 && menuChoice != 2 && menuChoice != 3 && menuChoice != 4 && menuChoice != 5);
+		    		}
+		    
+		    		catch(Exception e)
+		    		{
+		    			flag = true;
+		    			input.nextLine();
+		    		}
+		    	
+		    	}while(flag == true);
+		    	
+		    	/*  To convert to time zone using the menu option chosen by the user
+		    	 *
+		    	 *  Timezone.getTimezone(menuChoice); 
+		    	 */
 	    }
 		
 	    else if(menuChoice == 2)
