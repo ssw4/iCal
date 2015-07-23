@@ -320,6 +320,7 @@ public class iCal {
 		    	
 		    	/*  To convert to time zone using the menu option chosen by the user
 		    	 *
+		    	 *  if(menuChoice < 5 && menuChoice > 0)
 		    	 *  Timezone.getTimezone(menuChoice); 
 		    	 */
 	    }
