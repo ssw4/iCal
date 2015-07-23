@@ -3,6 +3,7 @@ package iCal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ListIterator;
 import java.util.TimeZone;
 
 public class Calendar {
@@ -154,6 +155,40 @@ public class Calendar {
 	public String toString() {
 		return calName + "\n" + version + "\n" + calScale + "\n" + tz;
 		
+	}
+	
+	public void calculateDistances() {
+		ListIterator<Event> iterator = calendar.listIterator();
+		while (iterator.hasNext()) {
+			if (iterator.hasPrevious()) {
+				Event e1 = calendar.get(iterator.previousIndex()); // gets the previous event
+				Event e2 = calendar.get(iterator.nextIndex()); // gets the next event
+				
+				if (e1.getGeoLat() != 0 && e1.getGeoLong() != 0 && e2.getGeoLat() != 0 && e2.getGeoLong() != 0) {
+					String distance = Float.toString(calculateDistance(e1.getGeoLat(), e1.getGeoLong(), e2.getGeoLat(), e2.getGeoLong()));
+					e1.appendComment("Distance to next event: " + distance + "m");
+				}
+			}
+			iterator.next();
+		}
+	}
+	
+	public float calculateDistance(float e1lat, float e1long, float e2lat, float e2long) {
+		double r = 6371000; // earth's radius in meters
+		
+		// convert everything to radians
+	    double radLat1 = Math.toRadians(e1lat);
+	    double radLat2 = Math.toRadians(e2lat);
+	    double dLat = Math.toRadians(e2lat-e1lat);
+	    double dLong =  Math.toRadians(e2long-e1long);
+
+	    // get the cosine and the sine
+
+	    double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.sin(dLong/2) * Math.sin(dLong/2);
+	    
+	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+	    return (float) (c * r);
 	}
 	
 }

@@ -426,21 +426,7 @@ public class iCal {
 		}
 	}
 	
-	/**
-	 * Initializes a new event in a given Calendar.
-	 * @param cal
-	 */
-	public static void addEventToCal(Calendar cal) {
-		
-	}
 	
-	/**
-	 * Removes an event from a given Calendar.
-	 * @param cal
-	 */
-	public static void removeEventFromCal(Calendar cal) {
-		
-	}
 	
 
 }
