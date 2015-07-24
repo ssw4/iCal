@@ -320,9 +320,13 @@ public class iCal {
 		    	
 		    	/*  To convert to time zone using the menu option chosen by the user
 		    	 *
-		    	 *  if(menuChoice < 5 && menuChoice > 0)
-		    	 *  Timezone.getTimezone(menuChoice); 
 		    	 */
+		    	 
+		    	if(menuChoice == 1) TimeZone.getTimeZone("Pacific/Honolulu");
+			else if (menuChoice == 2) TimeZone.getTimeZone("America/New_York");
+			else if (menuChoice == 3) TimeZone.getTimeZone("America/Chicago");
+			else if (menuChoice == 4) TimeZone.getTimeZone("America/Los_Angeles");
+			else TimeZone.getTimeZone(null);
 	    }
 		
 	    else if(menuChoice == 2)
