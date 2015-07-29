@@ -61,7 +61,7 @@ public class iCal {
         	 *  Getting the Menu choice from the user
 		 */
 		 
-	  	System.out.println("\n(1) Create new event. \n(2) View current events in calendar.\n(3) Modify event.\n");
+	  	System.out.println("\n(1) Create new event \n(2) Modify Event \n(3) Open New Calender\n(4) Save Calender\n");
 	    	do
 	    	{
 	    		flag = false;
@@ -72,7 +72,7 @@ public class iCal {
 	    				System.out.println("Please enter the number of your menu choice.");
 	    				menuChoice=input.nextInt();
 	    				input.nextLine();
-	    			} while(menuChoice != 1 && menuChoice != 2 && menuChoice != 3);
+	    			} while(menuChoice != 1 && menuChoice != 2 && menuChoice != 3 && menuChoice != 4);
 	    		} 
 	    		
 	    		catch(Exception e)
@@ -331,11 +331,15 @@ public class iCal {
 		
 	    else if(menuChoice == 2)
 	    {
-	    	System.out.println("Method to view current events.");
+	    	System.out.println("Method to Modify Event......");
+	    }
+	    else if(menuChoice == 3)
+	    {
+	    	System.out.println("Method to Open New Calender.....");
 	    }
 	    else
 	    {
-	    	System.out.println("Modify event method here");
+	    	System.out.println("Method to Save Calender.....");
 	    }
 		
 	}
