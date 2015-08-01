@@ -30,6 +30,7 @@ import java.util.TimeZone;
 
 public class iCal {
 	
+	// holds the only calendar in the program
 	private static Calendar cal;
 
 	public static void main(String[] args) {
@@ -89,7 +90,9 @@ public class iCal {
 		
 		if(menuChoice == 1)
 	    	{
-	    		System.out.println("Please enter the name of your event.");
+	    	// need to check for if the calendar already exists. if it does not already exist, use createCalendar(), getting the input for the name of the calendar and the timezone
+			
+			System.out.println("Please enter the name of your event.");
 			eName = input.nextLine();
 			System.out.println(eName);
 			
@@ -325,21 +328,25 @@ public class iCal {
 		    	if(menuChoice == 1) TimeZone.getTimeZone("Pacific/Honolulu");
 			else if (menuChoice == 2) TimeZone.getTimeZone("America/New_York");
 			else if (menuChoice == 3) TimeZone.getTimeZone("America/Chicago");
-			else if (menuChoice == 4) TimeZone.getTimeZone("America/Los_Angeles");
-			else TimeZone.getTimeZone(null);
+			else TimeZone.getTimeZone("America/Los_Angeles");
 	    }
 		
 	    else if(menuChoice == 2)
 	    {
 	    	System.out.println("Method to Modify Event......");
+	    	// displayCalendar(cal), if cal is not initialized, use createNewCalendar and prompt to add a new event instead
 	    }
 	    else if(menuChoice == 3)
 	    {
 	    	System.out.println("Method to Open New Calender.....");
+	    	// use openICSFile("filename");
+	    	// receive input from ICS file
 	    }
 	    else
 	    {
 	    	System.out.println("Method to Save Calender.....");
+	    	// use writeICSFile("filename", cal);
+	    	// it will write the currently opened calendar (cal) into a file
 	    }
 		
 	}
@@ -373,7 +380,11 @@ public class iCal {
 		    
 		    // create Calendar
 		    
-		    Calendar cal = new Calendar(calProperties[0][2], calProperties[1][2], TimeZone.getTimeZone(calProperties[2][2]));
+		    // initialize new calendar if not already initialized
+		    if (cal == null) {
+		    	cal = new Calendar(calProperties[0][2], calProperties[1][2], TimeZone.getTimeZone(calProperties[2][2]));
+		    }
+		    
 		    
 		    // process all events in the calendar
 		    while (line != null && !line.contains("END:VCALENDAR")) {
@@ -472,10 +483,8 @@ public class iCal {
 	public static void createCalendar(String name, String timezone) {
 		// create new Calendar object
 		String calName = "Calendar Name"; // get user input for name
-		TimeZone tz = TimeZone.getTimeZone("Pacific/Honolulu"); // get user input for name
-		// TimeZone tz = TimeZone.getTimeZone(timezone);
+		TimeZone tz = TimeZone.getTimeZone(timezone); // get user input for name
 		cal = new Calendar("Gregorian", calName, tz);
-		// cal = new Calendar("Gregorian", name, tz);
 	}
 	
 	/**
