@@ -44,7 +44,8 @@ public class iCal {
 		 
 		Scanner input = new Scanner(System.in);
 		String  eName;					//Event name
-		String  sDate, eDate; 				//Start Date, End Date
+		String  sDate, eDate;	                        //Start Date, End Date
+		String fileName;				//Name of file with Calendars
 		int     sDay = 0, eDay;				//Start Day, End Day
 		int     sMonth = 0, eMonth;			//Start Month, End Month
 		int     sYear = 0, eYear;			//Start Year, End Year
@@ -62,7 +63,7 @@ public class iCal {
         	 *  Getting the Menu choice from the user
 		 */
 		 
-	  	System.out.println("\n(1) Create new event \n(2) Modify Event \n(3) Open New Calender\n(4) Save Calender\n");
+	  	System.out.println("\n(1) Create new event \n(2) Remove Event \n(3) Open New Calender\n(4) Save Calender\n");
 	    	do
 	    	{
 	    		flag = false;
@@ -91,6 +92,8 @@ public class iCal {
 		if(menuChoice == 1)
 	    	{
 	    	// need to check for if the calendar already exists. if it does not already exist, use createCalendar(), getting the input for the name of the calendar and the timezone
+	    	        if()
+	    	        else createCalendar();
 			
 			System.out.println("Please enter the name of your event.");
 			eName = input.nextLine();
@@ -112,8 +115,7 @@ public class iCal {
 						input.nextLine();
 					} while(specification != 1 && specification != 2 && specification != 3);
 					
-					// Depending on which option they select we can go from there
-					// lmk if theres any options you think we should add as far as classification
+					
 				}
 				catch(Exception e)
 				{
@@ -333,18 +335,31 @@ public class iCal {
 		
 	    else if(menuChoice == 2)
 	    {
-	    	System.out.println("Method to Modify Event......");
-	    	// displayCalendar(cal), if cal is not initialized, use createNewCalendar and prompt to add a new event instead
+	    	//cal.getCalendar().get(indexofEvent);
+	    	removeEvent(cal.getCalendar().get(indexofEvent));
 	    }
 	    else if(menuChoice == 3)
 	    {
-	    	System.out.println("Method to Open New Calender.....");
+	    	System.out.println("Please enter the file name (exactly as it appears) where your calendar is stored");
+	    	fileName = input.nextLine();
+	    	try
+	    	{
+	    		openICSFile(fileName);
+	    	}
 	    	// use openICSFile("filename");
 	    	// receive input from ICS file
+	    
+	    	catch(Exception e)
+	    	{
+	    		System.out.println("File does not exist");
+	    	}
 	    }
 	    else
 	    {
-	    	System.out.println("Method to Save Calender.....");
+	    	System.out.println("Please enter the file name where you would like to save your calendar ");
+	    	fileName = input.nextLine();
+	    	writeICSFile(fileName);
+	    	
 	    	// use writeICSFile("filename", cal);
 	    	// it will write the currently opened calendar (cal) into a file
 	    }
