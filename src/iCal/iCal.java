@@ -335,8 +335,12 @@ public class iCal {
 		
 	    else if(menuChoice == 2)
 	    {
-	    	//cal.getCalendar().get(indexofEvent);
-	    	removeEvent(cal.getCalendar().get(indexofEvent));
+	    	System.out.println("Please enter the name of the event you would like to remove");
+	    	eName = input.next();
+	    	try
+	    	removeEvent(eName);
+	    	catch (Exception e)
+	    	System.out.println("Event does not exist");
 	    }
 	    else if(menuChoice == 3)
 	    {
