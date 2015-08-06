@@ -432,12 +432,27 @@ public class iCal {
 			    } else {
 				    System.out.println("Calendar has not been made.");
 			    }
-		    else if (menuChoice == 5) {
-			
-			    }
 		    }
+		    
+		    System.out.println("Would you like to edit or create a new calendar or event?");
+		    
+		    do {
+			    flag = false;
+			    try {
+				    do {
+					    System.out.println("Enter (1) to continue.\n Enter (2) to terminate program");
+					    menuChoice = input.nextInt();
+					    input.nextLine();
+				    } while (menuChoice != 1 && menuChoice != 2);
+			    }
 
-	      }while(menuChoice !=5);			
+			    catch (Exception e) {
+				    flag = true;
+				    input.nextLine();
+			    }
+		    } while (flag == true);
+		
+	      }while(menuChoice !=2);			
         }
 
    }
