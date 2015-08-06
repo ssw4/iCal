@@ -40,33 +40,37 @@ public class iCal {
 
 		@SuppressWarnings("resource")
 		Scanner input = new Scanner(System.in);
-		String eName; // Event name
-		String fileName; // Name of file with Calendars
-		int sDay = 0, eDay = 0; // Start Day, End Day
-		int sMonth = 0, eMonth = 0; // Start Month, End Month
-		int sYear = 0, eYear = 0; // Start Year, End Year
-//		int hours; // Event hours
-		int timeChoice; // Use to decide between a.m and p.m
-		int menuChoice = 0; // Displayed menu choice
-//		float duration; // Event duration, stored in minutes
-		float sTime = -1; // Start Time
-		float eTime = -1; // End Time
-//		float minutes; // Event duration
-		int specification = 0; // event specification
-		String spec = "";
-		int location = 0;
-		int locChoice = 0;
-		float geoLat = 0;
-		float geoLong = 0;
-		int comment = 0;
-		String com = "";
 		boolean flag = false;
 		int cont = 0;
 		int save = 0;
-
+		String fileName; // Name of file with Calendars
+		
 		do {
-			System.out
-					.println("\n(1) Create new event \n(2) Remove Event \n(3) Open New Calender\n(4) Save Calender\n");
+			
+			String eName; // Event name
+			
+			int sDay = 0, eDay = 0; // Start Day, End Day
+			int sMonth = 0, eMonth = 0; // Start Month, End Month
+			int sYear = 0, eYear = 0; // Start Year, End Year
+//			int hours; // Event hours
+			int timeChoice; // Use to decide between a.m and p.m
+			int menuChoice = 0; // Displayed menu choice
+//			float duration; // Event duration, stored in minutes
+			float sTime = -1; // Start Time
+			float eTime = -1; // End Time
+//			float minutes; // Event duration
+			int specification = 0; // event specification
+			String spec = "";
+			int location = 0;
+			int locChoice = 0;
+			float geoLat = 0;
+			float geoLong = 0;
+			int comment = 0;
+			String com = "";
+			
+			
+			
+			System.out.println("\n(1) Create new event \n(2) Remove Event \n(3) Open New Calender\n(4) Save Calender\n");
 			do {
 				flag = false;
 				try {
@@ -340,6 +344,9 @@ public class iCal {
 					} while (locChoice > 5 || locChoice < 1);
 
 				}
+				else {
+					locChoice = 0;
+				}
 
 				switch (locChoice) {
 				case 1:
@@ -375,10 +382,10 @@ public class iCal {
 				} while (comment != 1 && comment != 2 && comment != 0);
 
 				if (comment == 1) {
+					System.out.println("Enter comment.");
 					do {
-						System.out.println("Enter comment.");
 						com = input.nextLine();
-
+						input.nextLine();
 					} while (com != "");
 				}
 
@@ -436,6 +443,7 @@ public class iCal {
 				System.out.println("Please enter the file name where you would like to save your calendar:");
 				fileName = input.nextLine();
 				if (cal != null) {
+					cal.calculateDistances();
 					writeICSFile(fileName, cal);
 					System.out.println("Calendar saved as: " + fileName + ".ics");
 				} else {
@@ -478,6 +486,7 @@ public class iCal {
 			if (save == 1) {
 				System.out.println("Please enter the file name where you would like to save your calendar:");
 				fileName = input.nextLine();
+				cal.calculateDistances();
 				writeICSFile(fileName, cal);
 				System.out.println("Calendar saved as: " + fileName + ".ics");
 			}
