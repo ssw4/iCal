@@ -61,9 +61,6 @@ public class iCal {
 		String com = "";
 		boolean flag = false;
 
-		/*
-		 * Getting the Menu choice from the user
-		 */
 
 		System.out.println("\n(1) Create new event \n(2) Remove Event \n(3) Open New Calender\n(4) Save Calender\n");
 		do {
@@ -130,7 +127,6 @@ public class iCal {
 				/*
 				 * To convert to time zone using the menu option chosen by the
 				 * user
-				 *
 				 */
 
 				String timezone = "";
@@ -186,9 +182,6 @@ public class iCal {
 				break;
 			}
 			
-			/*
-			 * Get the start date of the event
-			 */
 
 			do {
 				flag = false;
@@ -274,9 +267,6 @@ public class iCal {
 				}
 			} while (timeChoice != 1 && timeChoice != 2);
 
-			/*
-			 * Getting the end time of the event
-			 */
 
 			do {
 				System.out.println("What time does " + eName + " end? (ex: 10.05)");
@@ -314,10 +304,6 @@ public class iCal {
 				minutes = (100 * ((eTime - (int) eTime) - (sTime - (int) sTime)));
 			}
 
-			/*
-			 * Storing event duration in minutes
-			 */
-
 			duration = (60 * hours) + minutes;
 			/*
 			 * Formatting to correctly display event duration
@@ -330,7 +316,6 @@ public class iCal {
 				System.out.printf("Duration: %d hours and %.0f minutes", hours, minutes);
 			System.out.println();
 			
-			// geo
 			
 			do {
 				System.out.println("Set event location? (1) Yes (2) No");
