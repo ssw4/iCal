@@ -1,6 +1,6 @@
 package iCal;
 
-import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertEquals;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -81,8 +81,8 @@ public class Test {
 		float geo1long = (float) -157.816246;
 		
 		// Sinclair Library
-		float geo2lat = (float) 21.299222;
-		float geo2long = (float) -157.820306;
+//		float geo2lat = (float) 21.299222;
+//		float geo2long = (float) -157.820306;
 		
 		// Kennedy Theater
 		float geo3lat = (float) 21.298978;
@@ -93,8 +93,8 @@ public class Test {
 		float geo4long = (float) -157.818548;
 		
 		// Bookstore
-		float geo5lat = (float) 21.298389;
-		float geo5long = (float) -157.818995;
+//		float geo5lat = (float) 21.298389;
+//		float geo5long = (float) -157.818995;
 		
 		Event e1 = new Event("Event1", time1, time2);
 		Event e2 = new Event("Event2", time3, time4);
@@ -115,7 +115,7 @@ public class Test {
 //		System.out.println(cal.getCalendar().get(2).getName());
 		
 		iCal.writeICSFile("Calendar1", cal);
-		Calendar cal2 = iCal.openICSFile("Calendar1.ics");
+//		Calendar cal2 = iCal.openICSFile("Calendar1.ics");
 		
 //		System.out.println(cal2.getCalendar().get(2).getComment());
 //		System.out.println(cal2.getCalendar().get(2).getName());

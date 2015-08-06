@@ -177,7 +177,7 @@ public class Event {
 	 * 
 	 */
 	public String toString() {
-		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("YYYYMMdd");
+//		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("YYYYMMdd");
 		DateTimeFormatter datetimeFormat = DateTimeFormatter.ofPattern("YYYYMMdd'T'HHmmss");
 		String event = "BEGIN:VEVENT\r\n";
 		event += "DTSTART:" + dtstart.format(datetimeFormat) + "\r\n";
